@@ -27,6 +27,13 @@ from pdf2image.exceptions import (
     PDFPageCountError,
     PDFSyntaxError
 )
+import os
+os.environ["AWS_SHARED_CREDENTIALS_FILE"] = "credentials"
+os.environ["AWS_CONFIG_FILE"] = "config"
+
+from textractor import Textractor
+extractor = Textractor(profile_name="ankit")
+
 
 from textractcaller.t_call import call_textract, Textract_Features
 import pandas as pd
