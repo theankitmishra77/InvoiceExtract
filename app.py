@@ -4,9 +4,7 @@ import base64
 import ssl
 import re
 import os
-from gevent import pywsgi
 from io import BytesIO
-from flask_talisman import Talisman
 import time
 import json
 from time import sleep
