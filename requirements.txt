@@ -11,6 +11,7 @@ flask-talisman==1.1.0
 gunicorn==23.0.0
 langchain==0.1.9
 ninja==1.11.1.1
+openai==1.44.0
 pandas==2.2.3
 pandas-stubs==2.0.2.230605
 pdf2image==1.15.1
