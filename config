@@ -1,0 +1,5 @@
+[default]
+region = us-east-1
+[profile ankit]
+region = us-west-1
+output = text
