@@ -8,6 +8,7 @@ Flask-Cors==5.0.0
 flask-ngrok==0.0.25
 flask-sock==0.7.0
 flask-talisman==1.1.0
+langchain==0.1.9
 ninja==1.11.1.1
 pandas==2.2.3
 pandas-stubs==2.0.2.230605
