@@ -13,7 +13,6 @@ from datetime import datetime
 from textractor import Textractor
 from dateutil import parser
 from datetime import datetime
-from collections import defaultdict
 from langchain.chat_models import ChatOpenAI 
 from langchain.prompts import PromptTemplate
 from langchain.llms import OpenAI
