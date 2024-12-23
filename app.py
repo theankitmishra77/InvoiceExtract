@@ -49,7 +49,7 @@ if not openai_api_key:
     raise ValueError("OpenAI API key not found. Ensure it is set in the .env file.")
 
 # Set the API key for OpenAI
-os.environ["OPENAI_API_KEY"] = openai_api_key
+os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
 
 #os.environ["OPENAI_API_KEY"] = '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' 
 
