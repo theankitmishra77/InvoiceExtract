@@ -12,6 +12,7 @@ gunicorn==23.0.0
 langchain==0.3.13
 langchain-core==0.3.28 
 langchain-openai==0.2.14 
+langchain-community==0.3.13
 langchain-text-splitters==0.3.4 
 langsmith==0.2.4 
 ninja==1.11.1.1
