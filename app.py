@@ -186,7 +186,7 @@ def extract_pdf():
         expense_doc = expense_output(pdf_name)
  #       pdf_file_path = r"D:\Tejas\Vadilal\MAV246409.pdf"  # Replace with your PDF path
         convert_pdf_to_images(pdf_name)
-
+        print(expense_doc)
         documentName = f"{pdf_name.split('.')[0]}.png"
                 
         j = call_textract_expense(input_document=documentName)
