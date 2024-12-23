@@ -220,6 +220,8 @@ def extract_pdf():
         5. Fields like BUISNESS_PLACE, SECTION_CODE, VENDOR(this is not GST No.) are unique Codes so mult be identified carefully or to be left empty. 
         6. Fields that can be converted to integer or float should be parsed as integer and float respectively.
         7. Date fields should have dates formatted as 'YYYY-MM-DD'.
+	8. PO Number and Buyers Order No. are exactly same. 
+        9. REFERENCE is the Invoice No. so capture it carefully without any error.
 
         Output the extracted fields in JSON format, preserving the field order.
         """
