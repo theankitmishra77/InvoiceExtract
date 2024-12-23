@@ -42,7 +42,7 @@ import pandas as pd
 load_dotenv()
 
 # Access the OpenAI API key from the environment
-openai_api_key = os.getenv("OPENAI_API_KEY")
+#openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # Ensure the API key is loaded
 if not openai_api_key:
