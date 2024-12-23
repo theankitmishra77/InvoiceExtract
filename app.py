@@ -275,12 +275,13 @@ def extract_pdf():
         {items}
 
         Notes:
-        1. Use the dictionary keys to derive values where possible.
-        2. If a field is not available, leave it empty.
-        3. Format the output as a JSON list with objects for each item.
-        4. Fields that can be converted to integer or float should be parsed as integer and float respectively.
-        5. Reference No is same as Invoice Number.
-        6. Date fields should have dates formatted as 'YYYY-MM-DD'.
+	1. 'ITEM_NO' field is a serial no. starting from 1 and goes on increasing according to no. of items.
+        2. Use the dictionary keys to derive values where possible.
+        3. If a field is not available, leave it empty.
+        4. Format the output as a JSON list with objects for each item.
+        5. Fields that can be converted to integer or float should be parsed as integer and float respectively.
+        6. Reference No is same as Invoice Number.
+        7. Date fields should have dates formatted as 'YYYY-MM-DD'.
 
         Output:
         """
