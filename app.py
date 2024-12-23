@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify
 from flask_cors import CORS
+from dotenv import load_dotenv
 import base64
 import ssl
 import re
@@ -38,8 +39,19 @@ extractor = Textractor(profile_name="ankit")
 
 from textractcaller.t_call import call_textract, Textract_Features
 import pandas as pd
+load_dotenv()
 
-os.environ["OPENAI_API_KEY"] = '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' 
+# Access the OpenAI API key from the environment
+openai_api_key = os.getenv("OPENAI_API_KEY")
+
+# Ensure the API key is loaded
+if not openai_api_key:
+    raise ValueError("OpenAI API key not found. Ensure it is set in the .env file.")
+
+# Set the API key for OpenAI
+os.environ["OPENAI_API_KEY"] = openai_api_key
+
+#os.environ["OPENAI_API_KEY"] = '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' 
 
 extractor = Textractor(profile_name="ankit")
 
