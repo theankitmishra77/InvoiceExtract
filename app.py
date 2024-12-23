@@ -45,8 +45,8 @@ load_dotenv()
 #openai_api_key = os.getenv("OPENAI_API_KEY")
 
 # Ensure the API key is loaded
-if not openai_api_key:
-    raise ValueError("OpenAI API key not found. Ensure it is set in the .env file.")
+# if not openai_api_key:
+#     raise ValueError("OpenAI API key not found. Ensure it is set in the .env file.")
 
 # Set the API key for OpenAI
 os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
