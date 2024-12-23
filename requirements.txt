@@ -10,6 +10,7 @@ flask-sock==0.7.0
 flask-talisman==1.1.0
 gunicorn==23.0.0
 langchain==0.1.9
+langchain-openai==0.2.14
 ninja==1.11.1.1
 openai==1.44.0
 pandas==2.2.3
