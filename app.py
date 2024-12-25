@@ -130,6 +130,9 @@ def extract_pdf():
         "REFERENCE",
         "AMOUNT",
         "TAX_AMOUNT",
+	"CGST_TAX_AMOUNT",
+	"SGST_TAX_AMOUNT",
+	"IGST_TAX_AMOUNT",
         "DOC_CURRENCY",
         "VENDOR",
         "VENDOR_NAME",
@@ -157,6 +160,9 @@ def extract_pdf():
         'AMOUNT',
         'PLANT',
         'TAX_PERCENT',
+	"CGST_RATE",
+	"SGST_RATE",
+	"IGST_RATE",
         'TAX_CODE',
         'HSN_CODE',
         'COST_CENTER',
@@ -222,6 +228,7 @@ def extract_pdf():
         7. Date fields should have dates formatted as 'YYYY-MM-DD'.
 	8. PO Number and Buyers Order No. are exactly same. 
         9. REFERENCE is the Invoice No. so capture it carefully without any error.
+	10. All the tax amounts should be captured carefully.
 
         Output the extracted fields in JSON format, preserving the field order.
         """
@@ -284,6 +291,7 @@ def extract_pdf():
         5. Fields that can be converted to integer or float should be parsed as integer and float respectively.
         6. Reference No is same as Invoice Number.
         7. Date fields should have dates formatted as 'YYYY-MM-DD'.
+	8. All the rates and rates(%) should be captured and parsed carefully.
 
         Output:
         """
