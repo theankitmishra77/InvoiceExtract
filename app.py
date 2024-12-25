@@ -228,6 +228,7 @@ def extract_pdf():
         7. Date fields should have dates formatted as 'YYYY-MM-DD'.
 	8. PO Number and Buyers Order No. are exactly same. 
         9. REFERENCE is the Invoice No. so capture it carefully without any error.
+	10. PO Number and Reference are never same.
 	10. All the tax amounts should be captured carefully.
 
         Output the extracted fields in JSON format, preserving the field order.
