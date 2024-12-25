@@ -274,7 +274,7 @@ def extract_pdf():
         #     data_dicts.append(result)
             
         Items = pd.DataFrame(data_dicts)
-        Items
+        peinr(Items)
 
         # Prompt Template
         prompt_template = """
