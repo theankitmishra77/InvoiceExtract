@@ -328,10 +328,10 @@ def extract_pdf():
         response['header']['MSG_STATUS'] = 'S'
         response['header']['ERROR_MSG'] = ''
         if response['header']["IGST_TAX_AMOUNT"] != 0:
-            response['items']['IGST_RATE'] = int((response['header']["IGST_TAX_AMOUNT"]*100)/(response['header']["TOTAL_INVOICE_AMOUNT"]-response['header']["IGST_TAX_AMOUNT"]))
+            response['items']['IGST_RATE'] = int((float(response['header']["IGST_TAX_AMOUNT"])*100)/(float(response['header']["TOTAL_INVOICE_AMOUNT"])-float(response['header']["IGST_TAX_AMOUNT"])))
         elif response['header']["CGST_TAX_AMOUNT"] != 0:
-            response['items']["CGST_RATE"] = int((response['header']["CGST_TAX_AMOUNT"]*100)/(response['header']["TOTAL_INVOICE_AMOUNT"]-response['header']["CGST_TAX_AMOUNT"]))
-            response['items']["SGST_RATE"] = int((response['header']["CGST_TAX_AMOUNT"]*100)/(response['header']["TOTAL_INVOICE_AMOUNT"]-response['header']["CGST_TAX_AMOUNT"]))
+            response['items']["CGST_RATE"] = int((float(response['header']["CGST_TAX_AMOUNT"])*100)/(float(response['header']["TOTAL_INVOICE_AMOUNT"])-float(response['header']["CGST_TAX_AMOUNT"])))
+            response['items']["SGST_RATE"] = int((float(response['header']["CGST_TAX_AMOUNT"])*100)/(float(response['header']["TOTAL_INVOICE_AMOUNT"])-float(response['header']["CGST_TAX_AMOUNT"])))
         print('Final Response',response)
         return jsonify(response)
     except Exception as e:
