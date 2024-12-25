@@ -312,7 +312,7 @@ def extract_pdf():
         items_input = str(Items.to_dict())
 
         # Run the chain
-        items = chain.run(fields=", ".join(item_keys), items=items_input)
+        items = chain.run(fields=", ".join(item_keys), items=items_input + Complete)
 
         # Print the result
         print(items)
