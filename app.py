@@ -327,9 +327,9 @@ def extract_pdf():
         response['header']['PDF_NAME'] = data['PDF_NAME']
         response['header']['MSG_STATUS'] = 'S'
         response['header']['ERROR_MSG'] = ''
-        if response['header']["IGST_TAX_AMOUNT"] != 0 or response['header']["IGST_TAX_AMOUNT"] != '':
+        if response['header']["IGST_TAX_AMOUNT"] != 0:
             response['items']['IGST_RATE'] = int((response['header']["IGST_TAX_AMOUNT"]*100)/(response['header']["TOTAL_INVOICE_AMOUNT"]-response['header']["IGST_TAX_AMOUNT"]))
-        elif response['header']["CGST_TAX_AMOUNT"] != 0 or response['header']["CGST_TAX_AMOUNT"] != '':
+        elif response['header']["CGST_TAX_AMOUNT"] != 0:
             response['items']["CGST_RATE"] = int((response['header']["CGST_TAX_AMOUNT"]*100)/(response['header']["TOTAL_INVOICE_AMOUNT"]-response['header']["CGST_TAX_AMOUNT"]))
             response['items']["SGST_RATE"] = int((response['header']["CGST_TAX_AMOUNT"]*100)/(response['header']["TOTAL_INVOICE_AMOUNT"]-response['header']["CGST_TAX_AMOUNT"]))
         print('Final Response',response)
