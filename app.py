@@ -21,8 +21,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 
 # API keys
 #ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
-ANTHROPIC_API_KEY = os.environ.get("ANTHROPIC_API_KEY")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+os.environ["ANTHROPIC_API_KEY"] = os.environ.get("ANTHROPIC_API_KEY")
+os.environ["OPENAI_API_KEY"] = os.environ.get("OPENAI_API_KEY")
 
 # Validate API keys
 if not ANTHROPIC_API_KEY or not OPENAI_API_KEY:
@@ -139,11 +139,31 @@ def extract_invoice_data(pdf_path):
         img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode('utf-8')
 
         # Anthropic call to extract raw JSON
-        message = anthropic_client.completions.create(
-            model="claude-2",
-            prompt=f"Extract all invoice data as JSON:\nImage data in Base64: {img_base64}",
-            max_tokens=4096
+        message = client.messages.create(
+            model="claude-3-5-sonnet-20241022",
+            max_tokens=4096,
+            temperature = 0,
+            messages=[
+                {
+                    "role": "user",
+                    "content": [
+                        {
+                            "type": "text",
+                            "text": "Extract all the information from this invoice in JSON format. Include all details like invoice number, po_number, billing_document_number, dates, seller details, buyer details, items, amounts, and payment terms."
+                        },
+                        {
+                            "type": "image",
+                            "source": {
+                                "type": "base64",
+                                "media_type": "image/png",
+                                "data": img_base64
+                            }
+                        }
+                    ]
+                }
+            ]
         )
+
         
         response_text = message['completion']
         invoice_data = json.loads(response_text)
