@@ -165,9 +165,15 @@ def extract_invoice_data(pdf_path):
         )
 
         
-        response_text = message['completion']
-        invoice_data = json.loads(response_text)
+        response_text =  message.content[0].text
 
+        if response_text.startswith('```json'):
+            response_text = response_text.split('```json')[1]
+        if response_text.endswith('```'):
+            response_text = response_text[:-3]
+        
+        invoice_data = json.loads(response_text.strip())
+        print(invoice_data)
         return invoice_data
     except Exception as e:
         logging.error(f"Error extracting invoice data: {e}")
