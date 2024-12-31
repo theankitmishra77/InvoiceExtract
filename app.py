@@ -188,10 +188,10 @@ def transform_invoice_data(invoice_data):
 
         # Convert the invoice data to JSON string for LangChain
         input_text = json.dumps(invoice_data, indent=2)
-
+        print(input_text)
         # Log the prepared input
         logging.info("Prepared input for LangChain transformation.")
-
+        
         # Create the chain
         chain = LLMChain(llm=openai_client, prompt=prompt_template)
 
