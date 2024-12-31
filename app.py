@@ -182,15 +182,32 @@ def extract_invoice_data(pdf_path):
 # Function to transform invoice data
 def transform_invoice_data(invoice_data):
     try:
+        # Verify the invoice data has the expected structure
+        if not isinstance(invoice_data, dict):
+            raise ValueError("Input data for transformation must be a dictionary.")
+
+        # Convert the invoice data to JSON string for LangChain
+        input_text = json.dumps(invoice_data, indent=2)
+
+        # Log the prepared input
+        logging.info("Prepared input for LangChain transformation.")
+
         # Create the chain
         chain = LLMChain(llm=openai_client, prompt=prompt_template)
-        
-        # Run the chain with the input text and fields
-        header = chain.run(text=json.dumps(invoice_data, indent=2))
+
+        # Run the transformation
+        header = chain.run(text=input_text)
         return json.loads(header)
-    except Exception as e:
-        logging.error(f"Error transforming invoice data: {e}")
+    except json.JSONDecodeError as e:
+        logging.error(f"Error decoding JSON in transformation: {e}")
+        return {"error": f"Failed to decode JSON: {e}"}
+    except ValueError as e:
+        logging.error(f"Value error in transformation: {e}")
         return {"error": str(e)}
+    except Exception as e:
+        logging.error(f"Unexpected error during transformation: {e}")
+        return {"error": f"Unexpected error: {e}"}
+
 
 # Flask API endpoint
 @app.route('/process-invoice', methods=['POST'])
