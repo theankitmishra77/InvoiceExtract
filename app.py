@@ -29,7 +29,7 @@ if not ANTHROPIC_API_KEY or not OPENAI_API_KEY:
     raise EnvironmentError("Missing required API keys. Ensure ANTHROPIC_API_KEY and OPENAI_API_KEY are set in .env")
 
 # Initialize clients
-anthropic_client = Anthropic(api_key=ANTHROPIC_API_KEY)
+client = Anthropic(api_key=ANTHROPIC_API_KEY)
 openai_client = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo", temperature=0)
 
 # Flask app setup
