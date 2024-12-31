@@ -127,6 +127,7 @@ Output format:
 }}
 All numerical field should be of type decimal having 2 decimal places.
 """
+)
 
 # Function to process PDF and extract invoice data
 def extract_invoice_data(pdf_path):
