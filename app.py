@@ -68,8 +68,8 @@ Input:
 {text}
 
 Output format:
-{
-    'header': {
+{{
+    'header': {{
         'PO_NO': '',
         'INVOICE_DATE': '',
         'POSTING_DATE': '',
@@ -98,9 +98,9 @@ Output format:
         'PDF_NAME': '',
         'MSG_STATUS': '',
         'ERROR_MSG': ''
-    },
+    }},
     'items': [
-        {
+        {{
             'DOC_NUMBER': '',
             'ITEM_NO': '',
             'MATNR': '',
@@ -122,12 +122,11 @@ Output format:
             'GOODS_RECEIPT_QTY': '',
             'PREVIOUS_INV_QTY': '',
             'PO_TOT_QTY': ''
-        }
+        }}
     ]
-}
-All numerical fields should be of type decimal having 2 decimal places.
-    """
-)
+}}
+All numerical field should be of type decimal having 2 decimal places.
+"""
 
 # Function to process PDF and extract invoice data
 def extract_invoice_data(pdf_path):
