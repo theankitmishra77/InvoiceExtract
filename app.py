@@ -51,6 +51,7 @@ Important Notes:
 6. Date fields should have dates formatted as 'YYYY-MM-DD'
 7. 'ITEM_NO' should start from 1 and increase consecutively.
 8. 'HSN CODE' is same as 'SAC' or 'HSN/SAC'
+9. 'UOM' represents Unit of Measurement so extract it for each item, remember it would be same for each item.
 
 CRITICAL TAX DETERMINATION RULES:
   1. IGST rate if 0 then Only CGST and SGST have equal non-zero values.
@@ -149,7 +150,7 @@ def extract_invoice_data(pdf_path):
                     "content": [
                         {
                             "type": "text",
-                            "text": "Extract all the information from this invoice in JSON format. Include all details like invoice number, po_number, billing_document_number, dates, seller details, buyer details, items, amounts, and payment terms."
+                            "text": "Extract all the information from this invoice in JSON format. Include all details like invoice number, po_number, billing_document_number, dates, seller details, buyer details, items, amounts, UOM(Unit of Measurement) and payment terms."
                         },
                         {
                             "type": "image",
