@@ -182,9 +182,12 @@ def extract_invoice_data(pdf_path):
 # Function to transform invoice data
 def transform_invoice_data(invoice_data):
     try:
+        # Create the chain
         chain = LLMChain(llm=openai_client, prompt=prompt_template)
-        formatted_data = chain.run(text=json.dumps(invoice_data, indent=2))
-        return json.loads(formatted_data)
+        
+        # Run the chain with the input text and fields
+        header = chain.run(text=json.dumps(invoice_data, indent=2))
+        return json.loads(header)
     except Exception as e:
         logging.error(f"Error transforming invoice data: {e}")
         return {"error": str(e)}
