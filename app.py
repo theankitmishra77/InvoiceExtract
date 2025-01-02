@@ -158,7 +158,21 @@ def extract_invoice_data(pdf_path):
                                 
                                 Invoice Number
                                 Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
-                                Invoice Type
+                                Invoice Type -> ("Standard Invoice",
+                                            "Proforma Invoice",
+                                            "Commercial Invoice",
+                                            "Credit Invoice (Credit Memo)",
+                                            "Debit Invoice (Debit Memo)",
+                                            "Timesheet Invoice",
+                                            "Recurring Invoice",
+                                            "Interim Invoice",
+                                            "Final Invoice",
+                                            "Past Due Invoice",
+                                            "E-Invoice (Electronic Invoice)",
+                                            "Utility Invoice",
+                                            "Expense Invoice",
+                                            "Tax Invoice",
+                                            "Retainer Invoice")
                                 Billing Document Number
                                 PO Number or Customer PO Number (handle both terms synonymously)
                                 Invoice and Due Dates
