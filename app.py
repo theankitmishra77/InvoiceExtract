@@ -179,8 +179,8 @@ def extract_invoice_data(pdf_path):
                                 Invoice and Due Dates
                                 
                                 Seller and Buyer Details:
-                                Seller Name, Address, and Contact Information
-                                Buyer Name, Address, and Contact Information
+                                Seller Name, Address, Vendor GSTIN (very accurately) and Contact Information
+                                Buyer Name, Address, Buyer GSTIN (very accurately) and Contact Information
                                 
                                 Line Items: 
                                 Item Description
