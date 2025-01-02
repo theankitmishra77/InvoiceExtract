@@ -155,7 +155,6 @@ def extract_invoice_data(pdf_path):
                             "text": """Extract all possible information from this invoice PDF and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
                                 Document Details:
-                                
                                 Invoice Number
                                 Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
                                 Invoice Type -> ("Standard Invoice",
@@ -174,33 +173,32 @@ def extract_invoice_data(pdf_path):
                                             "Tax Invoice",
                                             "Retainer Invoice")
                                 Billing Document Number
-                                PO Number or Customer PO Number (handle both terms synonymously)
+                                PO Number or Customer PO , PO#, P.O# to be captured always when present(All terms are same)
                                 Invoice and Due Dates
-                                Seller and Buyer Details:
                                 
+                                Seller and Buyer Details:
                                 Seller Name, Address, and Contact Information
                                 Buyer Name, Address, and Contact Information
-                                Line Items:
                                 
+                                Line Items: 
                                 Item Description
                                 Quantity
                                 Unit of Measurement (UOM)
                                 Unit Price or Rate
                                 Total Amount (ensure precision in calculation)
-                                Amounts and Totals:
                                 
+                                Amounts and Totals:
                                 Subtotal Amount
                                 Tax Amount (if applicable, with type and percentage)
                                 Total Amount (including taxes and discounts, if any)
                                 Discounts (if applicable)
-                                Payment Terms:
                                 
+                                Payment Terms: 
                                 Payment Due Date
                                 Payment Terms (e.g., Net 30, Net 45, etc.)
                                 Additional Notes or Remarks (if present in the invoice).
                                 
                                 Requirements:
-                                
                                 Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
                                 Map document currency (DOC_CURRENCY) intelligently based on the symbols or abbreviations present in the document (e.g., INR for ₹, USD for $).
                                 Include all dates in a consistent format (e.g., YYYY-MM-DD).
