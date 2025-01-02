@@ -252,15 +252,19 @@ def transform_invoice_data(invoice_data):
 
         # Run the transformation
         header = chain.run(text=input_text)
+        print(header)
         return json.loads(header)
     except json.JSONDecodeError as e:
         logging.error(f"Error decoding JSON in transformation: {e}")
+        print('Failed to decode JSON')
         return {"error": f"Failed to decode JSON: {e}"}
     except ValueError as e:
         logging.error(f"Value error in transformation: {e}")
+        print('Value error in transformation')
         return {"error": str(e)}
     except Exception as e:
         logging.error(f"Unexpected error during transformation: {e}")
+        print('Unexpected error during transformation')
         return {"error": f"Unexpected error: {e}"}
 
 
