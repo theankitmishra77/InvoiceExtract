@@ -128,7 +128,8 @@ Output format:
         }}
     ]
 }}
-All numerical field should be of type decimal having 2 decimal places.
+All numerical field should be of type decimal having 2 decimal places.Also 'PO_NO' value should be any of PO Number, Customer PO , PO#, P.O#.
+
 """
 )
 
@@ -155,6 +156,7 @@ def extract_invoice_data(pdf_path):
                             "text": """Extract all possible information from this invoice PDF and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
                                 Document Details:
+                                PO Number or Customer PO , PO#, P.O#. 
                                 Invoice Number
                                 Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
                                 Invoice Type -> ("Standard Invoice",
