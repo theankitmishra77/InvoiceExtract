@@ -264,7 +264,12 @@ def transform_invoice_data(invoice_data):
         # Run the transformation
         header = chain.run(text=input_text)
         print("Transformation Output:", header)
-        return json.dumps(header, indent=2)
+        parsed_header = json.loads(header)
+        print("Parsed Header:", parsed_header)
+    
+        # Format the JSON for pretty output
+        formatted_header = json.dumps(parsed_header, indent=2)
+        return formatted_header
     except json.JSONDecodeError as e:
         logging.error(f"Error decoding JSON in transformation: {e}")
         return {"error": f"Failed to decode JSON: {e}"}
