@@ -134,7 +134,7 @@ All numerical field should be of type decimal having 2 decimal places.Also 'PO_N
 )
 
 # Function to process PDF and extract invoice data
-def extract_invoice_data(pdf_path):
+def extract_invoice_data(pdf_path): 
     try:
         # Convert PDF to image
         images = convert_from_path(pdf_path)
@@ -146,7 +146,7 @@ def extract_invoice_data(pdf_path):
         message = client.messages.create(
             model="claude-3-5-sonnet-20241022",
             max_tokens=4096,
-            temperature = 0,
+            temperature=0,
             messages=[
                 {
                     "role": "user",
@@ -156,7 +156,7 @@ def extract_invoice_data(pdf_path):
                             "text": """Extract all possible information from this invoice PDF and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
                                 Document Details:
-                                PO Number or Customer PO , PO#, P.O#. 
+                                PO Number or Customer PO, PO#, P.O#.
                                 Invoice Number
                                 Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
                                 Invoice Type -> ("Standard Invoice",
@@ -175,7 +175,6 @@ def extract_invoice_data(pdf_path):
                                             "Tax Invoice",
                                             "Retainer Invoice")
                                 Billing Document Number
-                                PO Number or Customer PO , PO#, P.O# to be captured always when present(All terms are same)
                                 Invoice and Due Dates
                                 
                                 Seller and Buyer Details:
@@ -219,16 +218,27 @@ def extract_invoice_data(pdf_path):
             ]
         )
 
-        
-        response_text =  message.content[0].text
+        # Extracting the response text
+        response_text = message.content[0].text
 
+        # Debugging the response
+        print("Raw Response Text:", response_text)
+
+        # Clean and validate JSON format
         if response_text.startswith('```json'):
-            response_text = response_text.split('```json')[1]
+            response_text = response_text.split('```json', 1)[-1]
         if response_text.endswith('```'):
             response_text = response_text[:-3]
-        
-        invoice_data = json.loads(response_text.strip())
-        print(invoice_data)
+
+        # Validate JSON before decoding
+        response_text = response_text.strip()
+        try:
+            invoice_data = json.loads(response_text)
+        except json.JSONDecodeError as decode_err:
+            logging.error(f"JSON Decode Error: {decode_err}")
+            raise ValueError(f"Invalid JSON format in response: {response_text}")
+
+        print("Extracted Invoice Data:", invoice_data)
         return invoice_data
     except Exception as e:
         logging.error(f"Error extracting invoice data: {e}")
@@ -243,28 +253,26 @@ def transform_invoice_data(invoice_data):
 
         # Convert the invoice data to JSON string for LangChain
         input_text = json.dumps(invoice_data, indent=2)
-        print(input_text)
+        print("Prepared Input for LangChain:", input_text)
+        
         # Log the prepared input
         logging.info("Prepared input for LangChain transformation.")
         
-        # Create the chain
+        # Create the chain (assuming `chain` and `prompt_template` are defined elsewhere)
         chain = LLMChain(llm=openai_client, prompt=prompt_template)
 
         # Run the transformation
         header = chain.run(text=input_text)
-        print(header)
+        print("Transformation Output:", header)
         return json.loads(header)
     except json.JSONDecodeError as e:
         logging.error(f"Error decoding JSON in transformation: {e}")
-        print('Failed to decode JSON')
         return {"error": f"Failed to decode JSON: {e}"}
     except ValueError as e:
         logging.error(f"Value error in transformation: {e}")
-        print('Value error in transformation')
         return {"error": str(e)}
     except Exception as e:
         logging.error(f"Unexpected error during transformation: {e}")
-        print('Unexpected error during transformation')
         return {"error": f"Unexpected error: {e}"}
 
 
