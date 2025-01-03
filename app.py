@@ -12,6 +12,7 @@ from langchain_openai import ChatOpenAI
 from langchain import LLMChain
 from anthropic import Anthropic
 import logging
+import re
 
 # Load environment variables
 load_dotenv()
@@ -92,6 +93,7 @@ Output format:
         'PDF_NAME': '',
         'MSG_STATUS': '',
         'ERROR_MSG': ''
+        'EMAIL':''
     }},
     'items': [
         {{
@@ -114,6 +116,13 @@ All numerical field should be of type decimal having 2 decimal places.Also 'PO_N
 
 """
 )
+
+def is_email(string):
+    # Define the regex pattern for a valid email
+    email_regex = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$'
+    
+    # Match the string against the regex
+    return re.match(email_regex, string) is not None
 
 # Function to process PDF and extract invoice data
 def extract_invoice_data(pdf_path): 
@@ -313,6 +322,11 @@ def process_invoice():
         transformed_data['header']['PDF_NAME'] = data['PDF_NAME']
         transformed_data['header']['MSG_STATUS'] = 'S'
         transformed_data['header']['ERROR_MSG'] = ''
+        if is_email(transformed_data['header']['PO_NO']):           
+            transformed_data['header']['EMAIL'] = transformed_data['header']['PO_NO']
+            transformed_data['header']['PO_NO'] = ''
+        else:
+            transformed_data['header']['EMAIL'] = ''
 
         return jsonify(transformed_data), 200
 
