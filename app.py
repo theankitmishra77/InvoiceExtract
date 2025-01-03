@@ -97,7 +97,6 @@ Output format:
         {{
             'PO_NO': '',
             'ITEM_NO': '',
-            'MATNR': '',
             'MATERIAL_DESCRIPTION': '',
             'QUANTITY': '',
             'RATE': '',
@@ -166,6 +165,7 @@ def extract_invoice_data(pdf_path):
                                 Line Items: 
                                 - Item Description
                                 - Quantity
+                                - HSN COde or SAC Code
                                 - Unit of Measurement (UOM)
                                 - Unit Price or Rate
                                 - Total Amount (ensure precision in calculation)
