@@ -271,7 +271,7 @@ def transform_invoice_data(invoice_data):
         # Format the JSON for pretty output
         formatted_header = json.dumps(parsed_header, indent=2)
         print(type(formatted_header))
-        return formatted_header
+        return parsed_header
     except json.JSONDecodeError as e:
         logging.error(f"Error decoding JSON in transformation: {e}")
         return {"error": f"Failed to decode JSON: {e}"}
