@@ -76,7 +76,7 @@ Output format:
         'PO_NO': '',
         'INVOICE_TYPE':'',
         'INVOICE_DATE': '',
-        'REFERENCE': '',
+        'INVOICE_NO': '',
         'AMOUNT': '',
         'TAX_AMOUNT': '',
         'CGST_TAX_AMOUNT': '',
@@ -303,6 +303,12 @@ def process_invoice():
             return jsonify({"error": "Failed to transform invoice data."}), 500
             
         transformed_data['header']['DOC_NUMBER'] = data['DOC_NUMBER']
+        if transformed_data['header']['INVOICE_TYPE'].startswith('Tax'):
+            transformed_data['header']['INVOICE_TYPE'] = 'I'
+        elif transformed_data['header']['INVOICE_TYPE'].startswith('Credit'):
+            transformed_data['header']['INVOICE_TYPE'] = 'C'
+        elif transformed_data['header']['INVOICE_TYPE'].startswith('Debit'):
+            transformed_data['header']['INVOICE_TYPE'] = 'D'
         transformed_data['header']['COMPANY_CODE'] = data['COMPANY_CODE']
         transformed_data['header']['PDF_NAME'] = data['PDF_NAME']
         transformed_data['header']['MSG_STATUS'] = 'S'
