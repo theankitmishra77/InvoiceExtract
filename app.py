@@ -325,6 +325,7 @@ def process_invoice():
         if is_email(transformed_data['header']['PO_NO']):           
             transformed_data['header']['EMAIL'] = transformed_data['header']['PO_NO']
             transformed_data['header']['PO_NO'] = ''
+            transformed_data['items']['PO_NO'] = ''
         else:
             transformed_data['header']['EMAIL'] = ''
 
