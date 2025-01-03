@@ -264,6 +264,7 @@ def transform_invoice_data(invoice_data):
         # Run the transformation
         header = chain.run(text=input_text)
         print("Transformation Output:", header)
+        header = header.replace("'", '"')
         parsed_header = json.loads(header)
         print("Parsed Header:", parsed_header)
     
