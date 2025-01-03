@@ -53,6 +53,7 @@ Important Notes:
 8. 'HSN CODE' is same as 'SAC' or 'HSN/SAC'
 9. 'UOM' represents Unit of Measurement so extract it for each item, remember it would be same for each item.
 10. 'INVOICE_TYPE' and 'PO_NUMBER' should be captured accurately.
+11. 'DOC_CURRENCY' is Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.).
 
 CRITICAL TAX DETERMINATION RULES:
   1. IGST rate if 0 then Only CGST and SGST have equal non-zero values.
@@ -88,23 +89,17 @@ Output format:
         'VENDOR_STATE': '',
         'BUYER_GSTIN': '',
         'VENDOR_GSTIN': '',
-        'BUSINESS_PLACE': '',
-        'SECTION_CODE': '',
         'REVERSE_CHARGE': '',
-        'PAYMENT_TERM': '',
-        'BASE_LINE_DATE': '',
         'TOTAL_INVOICE_AMOUNT': '',
         'DUE_DATE': '',
         'WITH_HOLDING_TAX': '',
-        'DOC_NUMBER': '',
-        'COMPANY_CODE': '',
         'PDF_NAME': '',
         'MSG_STATUS': '',
         'ERROR_MSG': ''
     }},
     'items': [
         {{
-            'DOC_NUMBER': '',
+            'PO_NO': '',
             'ITEM_NO': '',
             'MATNR': '',
             'MATERIAL_DESCRIPTION': '',
@@ -112,19 +107,11 @@ Output format:
             'RATE': '',
             'UOM': '',
             'AMOUNT': '',
-            'PLANT': '',
             'TAX_PERCENT': '',
             'CGST_RATE': '',
             'SGST_RATE': '',
             'IGST_RATE': '',
-            'TAX_CODE': '',
             'HSN_CODE': '',
-            'COST_CENTER': '',
-            'PROFIT_CENTER': '',
-            'REFERENCE_DOC': '',
-            'GOODS_RECEIPT_QTY': '',
-            'PREVIOUS_INV_QTY': '',
-            'PO_TOT_QTY': ''
         }}
     ]
 }}
@@ -156,10 +143,10 @@ def extract_invoice_data(pdf_path):
                             "text": """Extract all possible information from this invoice PDF and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
                                 Document Details:
-                                PO Number or Customer PO, PO#, P.O#.
-                                Invoice Number
-                                Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
-                                Invoice Type -> ("Standard Invoice",
+                                - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number.
+                                - Invoice Number, INV NO, INV#, INVOICE NO, Invoice Reference Number, Reference Number, Invoice Ref No..
+                                - Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
+                                - Invoice Type -> ("Standard Invoice",
                                             "Proforma Invoice",
                                             "Commercial Invoice",
                                             "Credit Invoice (Credit Memo)",
@@ -174,36 +161,34 @@ def extract_invoice_data(pdf_path):
                                             "Expense Invoice",
                                             "Tax Invoice",
                                             "Retainer Invoice")
-                                Billing Document Number
-                                Invoice and Due Dates
+                                - Invoice and Due Dates
                                 
                                 Seller and Buyer Details:
-                                Seller Name, Address, Vendor GSTIN (very accurately) and Contact Information
-                                Buyer Name, Address, Buyer GSTIN (very accurately) and Contact Information
+                                - Seller Name, Address, Vendor GSTIN (very accurately)
+                                - Buyer Name, Address, Buyer GSTIN (very accurately)
                                 
                                 Line Items: 
-                                Item Description
-                                Quantity
-                                Unit of Measurement (UOM)
-                                Unit Price or Rate
-                                Total Amount (ensure precision in calculation)
+                                - Item Description
+                                - Quantity
+                                - Unit of Measurement (UOM)
+                                - Unit Price or Rate
+                                - Total Amount (ensure precision in calculation)
                                 
                                 Amounts and Totals:
-                                Subtotal Amount
-                                Tax Amount (if applicable, with type and percentage)
-                                Total Amount (including taxes and discounts, if any)
-                                Discounts (if applicable)
+                                - Subtotal Amount
+                                - Tax Amount (if applicable, with type and percentage)
+                                - Total Amount (including taxes and discounts, if any)
+                                - Discounts (if applicable)
                                 
-                                Payment Terms: 
-                                Payment Due Date
-                                Payment Terms (e.g., Net 30, Net 45, etc.)
-                                Additional Notes or Remarks (if present in the invoice).
+                                Reverse Charge:  
+                                - Is the tax payable on a reverse charge basis? (e.g., Yes/No)  
+                                - Additional details or notes related to reverse charge (if present in the invoice).
                                 
                                 Requirements:
-                                Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
-                                Map document currency (DOC_CURRENCY) intelligently based on the symbols or abbreviations present in the document (e.g., INR for ₹, USD for $).
-                                Include all dates in a consistent format (e.g., YYYY-MM-DD).
-                                Capture all data fields, even if they appear in unconventional formats or positions within the document."""
+                                - Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
+                                - Map document currency (DOC_CURRENCY) intelligently based on the symbols or abbreviations present in the document (e.g., INR for ₹, USD for $).
+                                - Include all dates in a consistent format (e.g., YYYY-MM-DD).
+                                - Capture all data fields, even if they appear in unconventional formats or positions within the document."""
                         },
                         {
                             "type": "image",
