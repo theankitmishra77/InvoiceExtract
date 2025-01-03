@@ -76,7 +76,6 @@ Output format:
         'PO_NO': '',
         'INVOICE_TYPE':'',
         'INVOICE_DATE': '',
-        'POSTING_DATE': '',
         'REFERENCE': '',
         'AMOUNT': '',
         'TAX_AMOUNT': '',
@@ -84,15 +83,12 @@ Output format:
         'SGST_TAX_AMOUNT': '',
         'IGST_TAX_AMOUNT': '',
         'DOC_CURRENCY': '',
-        'VENDOR': '',
         'VENDOR_NAME': '',
         'VENDOR_STATE': '',
         'BUYER_GSTIN': '',
         'VENDOR_GSTIN': '',
         'REVERSE_CHARGE': '',
         'TOTAL_INVOICE_AMOUNT': '',
-        'DUE_DATE': '',
-        'WITH_HOLDING_TAX': '',
         'PDF_NAME': '',
         'MSG_STATUS': '',
         'ERROR_MSG': ''
@@ -181,8 +177,7 @@ def extract_invoice_data(pdf_path):
                                 - Discounts (if applicable)
                                 
                                 Reverse Charge:  
-                                - Is the tax payable on a reverse charge basis? (e.g., Yes/No)  
-                                - Additional details or notes related to reverse charge (if present in the invoice).
+                                - Is the tax payable on a reverse charge basis? (Yes/No)  
                                 
                                 Requirements:
                                 - Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
