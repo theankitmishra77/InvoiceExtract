@@ -326,7 +326,8 @@ def process_invoice():
             transformed_data['header']['EMAIL'] = transformed_data['header']['PO_NO']
             transformed_data['header']['PO_NO'] = ''
             print('sdfghj')
-            transformed_data['items']['PO_NO'] = ''
+            for item in transformed_data['items']:
+                item['PO_NO'] = ''
         else:
             transformed_data['header']['EMAIL'] = ''
 
