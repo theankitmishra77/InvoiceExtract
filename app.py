@@ -322,6 +322,7 @@ def process_invoice():
         transformed_data['header']['PDF_NAME'] = data['PDF_NAME']
         transformed_data['header']['MSG_STATUS'] = 'S'
         transformed_data['header']['ERROR_MSG'] = ''
+        transformed_data['header']['ERROR_NO'] = ''
         if is_email(transformed_data['header']['PO_NO']):           
             transformed_data['header']['EMAIL'] = transformed_data['header']['PO_NO']
             transformed_data['header']['PO_NO'] = ''
@@ -340,6 +341,7 @@ def process_invoice():
             "header": {
                 "MSG_STATUS": "E",
                 "ERROR_MSG": str(e),
+                "ERROR_NO": 500
             },
             "items": []
         }), 500
