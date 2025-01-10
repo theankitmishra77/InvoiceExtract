@@ -291,7 +291,16 @@ def process_invoice():
         try:
             pdf_content = base64.b64decode(pdf_content_encoded)
         except base64.binascii.Error as e:
-            return jsonify({"error": f"Base64 decoding failed: {str(e)}"}), 400
+            #return jsonify({"error": f"Base64 decoding failed: {str(e)}"}), 400
+            return jsonify({
+            "header": {
+                "MSG_STATUS": "E",
+                "ERROR_MSG": f"Base64 decoding failed: {str(e)}",
+                "ERROR_NO": 504,
+                "PDF_NAME": data['PDF_NAME']
+            },
+            "items": []
+        }), 500
         print(pdf_name)        # Ensure the PDF name has a .pdf extension
         if not pdf_name.endswith(".pdf"):
             pdf_name += ".pdf"
@@ -300,17 +309,41 @@ def process_invoice():
             with open(pdf_name, 'wb') as pdf_file:
                 pdf_file.write(pdf_content)
         except IOError as e:
-            return jsonify({"error": f"Failed to save PDF file: {str(e)}"}), 500
-
+            #return jsonify({"error": f"Failed to save PDF file: {str(e)}"}), 500
+            return jsonify({
+            "header": {
+                "MSG_STATUS": "E",
+                "ERROR_MSG": f"Failed to save PDF file: {str(e)}",
+                "ERROR_NO": 505,
+                "PDF_NAME": data['PDF_NAME']
+            },
+            "items": []
+        }), 500
         # Extract and transform invoice data
         raw_data = extract_invoice_data(pdf_name)
         if "error" in raw_data:
-            return jsonify({"error": "Failed to extract data from invoice."}), 500
-
+            #return jsonify({"error": "Failed to extract data from invoice."}), 500
+            return jsonify({
+            "header": {
+                "MSG_STATUS": "E",
+                "ERROR_MSG": "Failed to extract data from invoice.",
+                "ERROR_NO": 506,
+                "PDF_NAME": data['PDF_NAME']
+            },
+            "items": []
+        }), 500
         transformed_data = transform_invoice_data(raw_data)
         if "error" in transformed_data:
-            return jsonify({"error": "Failed to transform invoice data."}), 500
-            
+            #return jsonify({"error": "Failed to transform invoice data."}), 500
+            return jsonify({
+            "header": {
+                "MSG_STATUS": "E",
+                "ERROR_MSG": "Failed to transform invoice data.",
+                "ERROR_NO": 507,
+                "PDF_NAME": data['PDF_NAME']
+            },
+            "items": []
+        }), 500
         transformed_data['header']['DOC_NUMBER'] = data['DOC_NUMBER']
         if transformed_data['header']['INVOICE_TYPE'].startswith('Tax'):
             transformed_data['header']['INVOICE_TYPE'] = 'I'
@@ -341,7 +374,8 @@ def process_invoice():
             "header": {
                 "MSG_STATUS": "E",
                 "ERROR_MSG": str(e),
-                "ERROR_NO": 500
+                "ERROR_NO": 500,
+                "PDF_NAME": data['PDF_NAME']
             },
             "items": []
         }), 500
