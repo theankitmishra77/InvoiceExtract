@@ -147,7 +147,7 @@ def extract_invoice_data(pdf_path):
                             "text": """Extract all possible information from this invoice PDF and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
                                 Document Details:
-                                - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number.
+                                - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number. This is a 10 digit code and don't make any mistake i.e capture it  very carefully and accurately.
                                 - Invoice Number, INV NO, INV#, INVOICE NO, Invoice Reference Number, Reference Number, Invoice Ref No..
                                 - Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
                                 - Invoice Type -> ("Standard Invoice",
