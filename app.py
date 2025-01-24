@@ -155,6 +155,13 @@ def extract_invoice_data(pdf_path):
             filename = f"page_{idx}.png"
             page.save(filename, format="PNG")
             image_filenames.append(filename)
+        
+        all_documents = []
+        
+        # Process each image in the list
+        for image_file in image_files:
+            document = extractor.detect_document_text(file_source=image_file)
+            all_documents.append(document.lines)
             
         raw_text = ""
         for idx, lines in enumerate(all_documents, start=1):
