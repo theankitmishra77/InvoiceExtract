@@ -159,7 +159,7 @@ def extract_invoice_data(pdf_path):
         all_documents = []
         
         # Process each image in the list
-        for image_file in image_files:
+        for image_file in image_filenames:
             document = extractor.detect_document_text(file_source=image_file)
             all_documents.append(document.lines)
             
