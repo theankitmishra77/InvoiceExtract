@@ -43,6 +43,8 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 #ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 ANTHROPIC_API_KEY= os.environ.get("ANTHROPIC_API_KEY")
 OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+ACCESS_KEY = os.environ.get("ACCESS_KEY")
+SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY")
 
 # Validate API keys
 if not ANTHROPIC_API_KEY or not OPENAI_API_KEY:
