@@ -1,3 +1,9 @@
+#!/usr/bin/env python
+# coding: utf-8
+
+# In[ ]:
+
+
 import base64
 import os
 import json
@@ -13,6 +19,19 @@ from langchain import LLMChain
 from anthropic import Anthropic
 import logging
 import re
+from textractor import Textractor
+from textractor.data.constants import TextractFeatures
+from textractor.data.constants import AnalyzeExpenseFields, AnalyzeExpenseFieldsGroup, AnalyzeExpenseLineItemFields
+from collections import defaultdict
+from textractor.data.constants import TextractFeatures
+from textractor.data.constants import AnalyzeExpenseFields, AnalyzeExpenseFieldsGroup, AnalyzeExpenseLineItemFields
+# Define the required keys
+from pdf2image import convert_from_path, convert_from_bytes
+from pdf2image.exceptions import (
+    PDFInfoNotInstalledError,
+    PDFPageCountError,
+    PDFSyntaxError
+)
 
 # Load environment variables
 load_dotenv()
@@ -129,80 +148,65 @@ def extract_invoice_data(pdf_path):
     try:
         # Convert PDF to image
         images = convert_from_path(pdf_path)
-        img_byte_arr = BytesIO()
-        images[0].save(img_byte_arr, format='PNG')
-        img_base64 = base64.b64encode(img_byte_arr.getvalue()).decode('utf-8')
+
+        # Save each image and store its filename
+        image_filenames = []
+        for idx, page in enumerate(images, start=1):
+            filename = f"page_{idx}.png"
+            page.save(filename, format="PNG")
+            image_filenames.append(filename)
+            
+        raw_text = ""
+        for idx, lines in enumerate(all_documents, start=1):
+            print(f"Document {idx} Lines:")
+            for i in lines:
+                raw_text = raw_text + str(i)+'\n'
 
         # Anthropic call to extract raw JSON
         message = client.messages.create(
-            model="claude-3-5-sonnet-20241022",
-            max_tokens=4096,
-            temperature=0,
+            model="claude-3-5-sonnet-20241022",  # Specify the model
+            max_tokens=4096,  # Maximum tokens for the output
+            temperature=0,  # Set temperature for deterministic responses
             messages=[
                 {
                     "role": "user",
-                    "content": [
-                        {
-                            "type": "text",
-                            "text": """Extract all possible information from this invoice PDF and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
+                    "content": f"""Extract all possible information from this invoice text and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
-                                Document Details:
-                                - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number. This is a 10 digit code and don't make any mistake i.e capture it  very carefully and accurately.
-                                - Invoice Number, INV NO, INV#, INVOICE NO, Invoice Reference Number, Reference Number, Invoice Ref No..
-                                - Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
-                                - Invoice Type -> ("Standard Invoice",
-                                            "Proforma Invoice",
-                                            "Commercial Invoice",
-                                            "Credit Invoice (Credit Memo)",
-                                            "Debit Invoice (Debit Memo)",
-                                            "Timesheet Invoice",
-                                            "Recurring Invoice",
-                                            "Interim Invoice",
-                                            "Final Invoice",
-                                            "Past Due Invoice",
-                                            "E-Invoice (Electronic Invoice)",
-                                            "Utility Invoice",
-                                            "Expense Invoice",
-                                            "Tax Invoice",
-                                            "Retainer Invoice")
-                                - Invoice and Due Dates
-                                
-                                Seller and Buyer Details:
-                                - Seller Name, Address, Vendor GSTIN (very accurately)
-                                - Buyer Name, Address, Buyer GSTIN (very accurately)
-                                
-                                Line Items: 
-                                - Item Description
-                                - Quantity
-                                - HSN COde or SAC Code
-                                - Unit of Measurement (UOM)
-                                - Unit Price or Rate
-                                - Total Amount (ensure precision in calculation)
-                                
-                                Amounts and Totals:
-                                - Subtotal Amount
-                                - Tax Amount (if applicable, with type and percentage)
-                                - Total Amount (including taxes and discounts, if any)
-                                - Discounts (if applicable)
-                                
-                                Reverse Charge:  
-                                - Is the tax payable on a reverse charge basis? (Yes/No)  
-                                
-                                Requirements:
-                                - Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
-                                - Map document currency (DOC_CURRENCY) intelligently based on the symbols or abbreviations present in the document (e.g., INR for ₹, USD for $).
-                                - Include all dates in a consistent format (e.g., YYYY-MM-DD).
-                                - Capture all data fields, even if they appear in unconventional formats or positions within the document."""
-                        },
-                        {
-                            "type": "image",
-                            "source": {
-                                "type": "base64",
-                                "media_type": "image/png",
-                                "data": img_base64
-                            }
-                        }
-                    ]
+                    Document Details:
+                    - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number. This is a 10 digit code and don't make any mistake i.e capture it very carefully and accurately.
+                    - Invoice Number, INV NO, INV#, INVOICE NO, Invoice Reference Number, Reference Number, Invoice Ref No..
+                    - Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
+                    - Invoice Type -> ("Standard Invoice", "Tax Invoice", "Proforma Invoice", "Credit Invoice (Credit Memo)", "Debit Invoice (Debit Memo)", etc.)
+                    - Invoice and Due Dates
+
+                    Seller and Buyer Details:
+                    - Seller Name, Address, Vendor GSTIN (very accurately)
+                    - Buyer Name, Address, Buyer GSTIN (very accurately)
+
+                    Line Items:
+                    - Item Description
+                    - Quantity
+                    - HSN Code or SAC Code
+                    - Unit of Measurement (UOM)
+                    - Unit Price or Rate
+                    - Total Amount (ensure precision in calculation)
+
+                    Amounts and Totals:
+                    - Subtotal Amount
+                    - Tax Amount (if applicable, with type and percentage)
+                    - Total Amount (including taxes and discounts, if any)
+                    - Discounts (if applicable)
+
+                    Reverse Charge:
+                    - Is the tax payable on a reverse charge basis? (Yes/No)
+
+                    Requirements:
+                    - Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
+                    - Include all dates in a consistent format (e.g., YYYY-MM-DD).
+
+                    Invoice Text:
+                    {raw_text}
+                    """
                 }
             ]
         )
@@ -382,3 +386,4 @@ def process_invoice():
 
 if __name__ == '__main__':
     app.run(debug=True)
+
