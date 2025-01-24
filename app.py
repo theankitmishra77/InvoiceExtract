@@ -48,6 +48,7 @@ OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
 if not ANTHROPIC_API_KEY or not OPENAI_API_KEY:
     raise EnvironmentError("Missing required API keys. Ensure ANTHROPIC_API_KEY and OPENAI_API_KEY are set in .env")
 
+extractor = Textractor(profile_name="ankit")
 # Initialize clients
 client = Anthropic(api_key=ANTHROPIC_API_KEY)
 openai_client = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo", temperature=0)
