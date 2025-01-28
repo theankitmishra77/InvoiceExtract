@@ -157,6 +157,19 @@ def is_email(string):
     # Match the string against the regex
     return re.match(email_regex, string) is not None
 
+def fix_and_parse_json(raw_json):
+    try:
+        # Remove comments (lines with //)
+        fixed_json = re.sub(r"//.*", "", raw_json)
+        
+        # Load the fixed JSON
+        parsed_json = json.loads(fixed_json)
+        
+        return parsed_json
+    except json.JSONDecodeError as e:
+        print(f"Error decoding JSON: {e}")
+        return None
+
 def detect_text_from_image(image_path):
     with open(image_path, 'rb') as document:
         # Call Textract to detect text in the image
@@ -247,7 +260,7 @@ def extract_invoice_data(pdf_path):
 
         # Extracting the response text
         response_text = message.content[0].text
-
+        response_text = fix_and_parse_json(response_text)
         # Debugging the response
         print("Raw Response Text:", response_text)
 
