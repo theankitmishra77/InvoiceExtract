@@ -260,7 +260,7 @@ def extract_invoice_data(pdf_path):
 
         # Extracting the response text
         response_text = message.content[0].text
-        response_text = fix_and_parse_json(response_text)
+        #response_text = fix_and_parse_json(response_text)
         # Debugging the response
         print("Raw Response Text:", response_text)
 
@@ -273,7 +273,7 @@ def extract_invoice_data(pdf_path):
         # Validate JSON before decoding
         response_text = response_text.strip()
         try:
-            invoice_data = json.loads(response_text)
+            invoice_data = fix_and_parse_json(response_text)
         except json.JSONDecodeError as decode_err:
             logging.error(f"JSON Decode Error: {decode_err}")
             raise ValueError(f"Invalid JSON format in response: {response_text}")
