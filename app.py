@@ -199,7 +199,7 @@ def extract_invoice_data(pdf_path):
         # Anthropic call to extract raw JSON
         message = client.messages.create(
             model="claude-3-5-sonnet-20241022",  # Specify the model
-            max_tokens=4096,  # Maximum tokens for the output
+            max_tokens=8192,  # Maximum tokens for the output
             temperature=0,  # Set temperature for deterministic responses
             messages=[
                 {
