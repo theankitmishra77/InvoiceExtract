@@ -383,11 +383,11 @@ def process_invoice():
             "items": []
         }), 500
         transformed_data['header']['DOC_NUMBER'] = data['DOC_NUMBER']
-        if transformed_data['header']['INVOICE_TYPE'].startswith('Tax'):
+        if transformed_data['header']['INVOICE_TYPE'].lower().startswith('tax'):
             transformed_data['header']['INVOICE_TYPE'] = 'I'
-        elif transformed_data['header']['INVOICE_TYPE'].startswith('Credit'):
+        elif transformed_data['header']['INVOICE_TYPE'].lower().startswith('credit'):
             transformed_data['header']['INVOICE_TYPE'] = 'C'
-        elif transformed_data['header']['INVOICE_TYPE'].startswith('Debit'):
+        elif transformed_data['header']['INVOICE_TYPE'].lower().startswith('debit'):
             transformed_data['header']['INVOICE_TYPE'] = 'D'
         transformed_data['header']['COMPANY_CODE'] = data['COMPANY_CODE']
         transformed_data['header']['PDF_NAME'] = data['PDF_NAME']
