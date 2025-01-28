@@ -43,7 +43,7 @@ logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(
 # API keys
 #ANTHROPIC_API_KEY = os.getenv('ANTHROPIC_API_KEY')
 ANTHROPIC_API_KEY= os.environ.get("ANTHROPIC_API_KEY")
-OPENAI_API_KEY = os.environ.get("OPENAI_API_KEY")
+OPENAI_API_KEY = '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'
 ACCESS_KEY = os.environ.get("ACCESS_KEY")
 SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY")
 
