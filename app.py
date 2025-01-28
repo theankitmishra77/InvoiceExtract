@@ -19,6 +19,7 @@ from langchain import LLMChain
 from anthropic import Anthropic
 import logging
 import re
+import boto3
 from textractor import Textractor
 from textractor.data.constants import TextractFeatures
 from textractor.data.constants import AnalyzeExpenseFields, AnalyzeExpenseFieldsGroup, AnalyzeExpenseLineItemFields
@@ -50,7 +51,16 @@ SECRET_ACCESS_KEY = os.environ.get("SECRET_ACCESS_KEY")
 if not ANTHROPIC_API_KEY or not OPENAI_API_KEY:
     raise EnvironmentError("Missing required API keys. Ensure ANTHROPIC_API_KEY and OPENAI_API_KEY are set in .env")
 
-extractor = Textractor(profile_name="ankit")
+aws_access_key_id = 'AKIA47CRZFTIYWIUNKVM'
+aws_secret_access_key = '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'
+aws_region = "us-east-1" # Default to 'us-east-1'
+
+client_boto = boto3.client(
+    'textract',
+    aws_access_key_id=aws_access_key_id,
+    aws_secret_access_key=aws_secret_access_key,
+    region_name=aws_region
+)
 # Initialize clients
 client = Anthropic(api_key=ANTHROPIC_API_KEY)
 openai_client = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo", temperature=0)
@@ -146,6 +156,19 @@ def is_email(string):
     # Match the string against the regex
     return re.match(email_regex, string) is not None
 
+def detect_text_from_image(image_path):
+    with open(image_path, 'rb') as document:
+        # Call Textract to detect text in the image
+        response = client_boto.detect_document_text(Document={'Bytes': document.read()})
+    
+    # Extract and print detected text
+    detected_text = []
+    for block in response['Blocks']:
+        if block['BlockType'] == 'LINE':  # Lines of text
+            detected_text.append(block['Text'])
+    
+    return detected_text
+    
 # Function to process PDF and extract invoice data
 def extract_invoice_data(pdf_path): 
     try:
@@ -163,8 +186,8 @@ def extract_invoice_data(pdf_path):
         
         # Process each image in the list
         for image_file in image_filenames:
-            document = extractor.detect_document_text(file_source=image_file)
-            all_documents.append(document.lines)
+            document = detect_text_from_image(image_file)
+            all_documents.append(document)
             
         raw_text = ""
         for idx, lines in enumerate(all_documents, start=1):
