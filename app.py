@@ -65,6 +65,7 @@ client_boto = boto3.client(
 # Initialize clients
 client = Anthropic(api_key=ANTHROPIC_API_KEY)
 openai_client = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo", temperature=0)
+openai_extraction = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-4", temperature=0)
 
 # Flask app setup
 app = Flask(__name__)
@@ -210,56 +211,51 @@ def extract_invoice_data(pdf_path):
                 raw_text = raw_text + str(i)+'\n'
 
         # Anthropic call to extract raw JSON
-        message = client.messages.create(
-            model="claude-3-5-sonnet-20241022",  # Specify the model
-            max_tokens=8192,  # Maximum tokens for the output
-            temperature=0,  # Set temperature for deterministic responses
-            messages=[
-                {
-                    "role": "user",
-                    "content": f"""Extract all possible information from this invoice text and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
+        messages = [
+            {"role": "system", "content": "You are an expert at extracting structured information from invoice text."},
+            {"role": "user", "content": f"""Extract all possible information from this invoice text and provide the output in JSON format. Ensure the extraction includes, but is not limited to, the following details with absolute precision:
 
-                    Document Details:
-                    - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number. This is a 10 digit code and don't make any mistake i.e capture it very carefully and accurately.
-                    - Invoice Number, INV NO, INV#, INVOICE NO, Invoice Reference Number, Reference Number, Invoice Ref No..
-                    - Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
-                    - Invoice Type -> ("Standard Invoice", "Tax Invoice", "Proforma Invoice", "Credit Invoice (Credit Memo)", "Debit Invoice (Debit Memo)", etc.)
-                    - Invoice and Due Dates
+            Document Details:
+            - PO Number or Customer PO, PO#, P.O#, Customer Reference, Customer Ref No., Customer Reference Number. This is a 10 digit code and don't make any mistake i.e capture it very carefully and accurately.
+            - Invoice Number, INV NO, INV#, INVOICE NO, Invoice Reference Number, Reference Number, Invoice Ref No..
+            - Document Currency (e.g., INR for Indian Rupees, USD for US Dollars, etc.)
+            - Invoice Type -> ("Standard Invoice", "Tax Invoice", "Proforma Invoice", "Credit Invoice (Credit Memo)", "Debit Invoice (Debit Memo)", etc.)
+            - Invoice and Due Dates
 
-                    Seller and Buyer Details:
-                    - Seller Name, Address, Vendor GSTIN (very accurately)
-                    - Buyer Name, Address, Buyer GSTIN (very accurately)
+            Seller and Buyer Details:
+            - Seller Name, Address, Vendor GSTIN (very accurately)
+            - Buyer Name, Address, Buyer GSTIN (very accurately)
 
-                    Line Items:
-                    - Item Description
-                    - Quantity
-                    - HSN Code or SAC Code
-                    - Unit of Measurement (UOM)
-                    - Unit Price or Rate
-                    - Total Amount (ensure precision in calculation)
+            Line Items:
+            - Item Description
+            - Quantity
+            - HSN Code or SAC Code
+            - Unit of Measurement (UOM)
+            - Unit Price or Rate
+            - Total Amount (ensure precision in calculation)
 
-                    Amounts and Totals:
-                    - Subtotal Amount
-                    - Tax Amount (if applicable, with type and percentage)
-                    - Total Amount (including taxes and discounts, if any)
-                    - Discounts (if applicable)
+            Amounts and Totals:
+            - Subtotal Amount
+            - Tax Amount (if applicable, with type and percentage)
+            - Total Amount (including taxes and discounts, if any)
+            - Discounts (if applicable)
 
-                    Reverse Charge:
-                    - Is the tax payable on a reverse charge basis? (Yes/No)
+            Reverse Charge:
+            - Is the tax payable on a reverse charge basis? (Yes/No)
 
-                    Requirements:
-                    - Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
-                    - Include all dates in a consistent format (e.g., YYYY-MM-DD).
+            Requirements:
+            - Ensure all numeric details, such as rates, amounts, and totals, are extracted accurately without errors.
+            - Include all dates in a consistent format (e.g., YYYY-MM-DD).
 
-                    Invoice Text:
-                    {raw_text}
-                    """
-                }
-            ]
-        )
+            Invoice Text:
+            {raw_text}
+            """}
+        ]
 
-        # Extracting the response text
-        response_text = message.content[0].text
+        response = openai_extraction.invoke(messages)
+        
+        # Extract the response text
+        response_text = response.content
         #response_text = fix_and_parse_json(response_text)
         # Debugging the response
         print("Raw Response Text:", response_text)
