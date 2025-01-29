@@ -64,7 +64,7 @@ client_boto = boto3.client(
 )
 # Initialize clients
 client = Anthropic(api_key=ANTHROPIC_API_KEY)
-openai_client = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-3.5-turbo", temperature=0)
+openai_client = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-4", temperature=0)
 openai_extraction = ChatOpenAI(api_key=OPENAI_API_KEY, model="gpt-4", temperature=0)
 
 # Flask app setup
